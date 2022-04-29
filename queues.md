@@ -1652,37 +1652,23 @@ Using the `--backoff` option, you may specify how many seconds Laravel should wa
 php artisan queue:work redis --tries=3 --backoff=3
 ```
 
-If you would like to configure how many seconds Laravel should wait before retrying a job that has encountered an exception on a per-job basis, you may do so by defining a `backoff` property on your job class:
-
+If you would like to configure how many seconds Laravel should wait before retrying a job that has encountered an exception on a per-job basis, you may do so by defining a `backoff` property on your job class. In this example, the retry delay will be 1 second for the first retry, 5 seconds for the second retry, and 10 seconds for the third retry, all further attempts will be 10 seconds:
     /**
      * The number of seconds to wait before retrying the job.
      *
-     * @var int
+     * @var string
      */
-    public $backoff = 3;
+    public $backoff = '1,5,10';
 
-If you require more complex logic for determining the job's backoff time, you may define a `backoff` method on your job class:
-
+If you require more complex logic for determining the job's backoff time, you may define a `backoff` method on your job class.
     /**
     * Calculate the number of seconds to wait before retrying the job.
     *
-    * @return int
+    * @return string
     */
     public function backoff()
     {
-        return 3;
-    }
-
-You may easily configure "exponential" backoffs by returning an array of backoff values from the `backoff` method. In this example, the retry delay will be 1 second for the first retry, 5 seconds for the second retry, and 10 seconds for the third retry:
-
-    /**
-    * Calculate the number of seconds to wait before retrying the job.
-    *
-    * @return array
-    */
-    public function backoff()
-    {
-        return [1, 5, 10];
+        return '1,5,10';
     }
 
 <a name="cleaning-up-after-failed-jobs"></a>
